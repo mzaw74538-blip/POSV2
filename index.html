@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUREUS | O2O Hospitality & Kitchen Management Suite</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fffdf0',
+                            100: '#fefab8',
+                            200: '#fdf380',
+                            300: '#fce848',
+                            400: '#fada10',
+                            500: '#d4af37', // Metallic primary gold
+                            600: '#aa8822',
+                            700: '#806218',
+                            800: '#553e10',
+                            900: '#2b1e05',
+                        },
+                        dark: {
+                            base: '#0B0F17',
+                            card: '#131924',
+                            sidebar: '#080B11',
+                            border: '#1F293D',
+                            hover: '#1A2333'
+                        },
+                        surface: {
+                            light: '#F8FAFC',
+                            card: '#FFFFFF',
+                            border: '#E2E8F0',
+                            muted: '#64748B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
+        
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF099 0%, #D4AF37 50%, #997A15 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border-glow {
+            box-shadow: 0 0 15px -3px rgba(212, 175, 55, 0.2);
+        }
+        .glass-panel-dark {
+            background: rgba(19, 25, 36, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="h-full font-sans bg-slate-900 text-slate-100 antialiased overflow-hidden selection:bg-gold-500 selection:text-black">
+
+    <div class="flex h-full w-full overflow-hidden">
+
+        <!-- ========================================================= -->
+        <!-- SIDEBAR NAVIGATION (Collapsible & Mobile Responsive)       -->
+        <!-- ========================================================= -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-dark-sidebar border-r border-dark-border transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
+            
+            <!-- Sidebar Header / Brand -->
+            <div>
+                <div class="h-16 flex items-center justify-between px-6 border-b border-dark-border/80">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-dark-base font-serif font-bold text-xl shadow-lg">
+                            A
+                        </div>
+                        <div>
+                            <span class="font-serif font-bold text-lg tracking-wider text-white">AUREUS</span>
+                            <span class="block text-[10px] uppercase tracking-widest text-gold-500 font-semibold">SaaS Enterprise</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-white">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-8rem)] hide-scrollbar" id="nav-menu">
+                    <!-- Nav items dynamically highlighted via JS -->
+                </nav>
+            </div>
+
+            <!-- User Profile / Bottom Info -->
+            <div class="p-4 border-t border-dark-border bg-dark-base/50 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <img id="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="w-9 h-9 rounded-full border border-gold-500/50 object-cover" alt="User Avatar">
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-dark-sidebar rounded-full"></span>
+                    </div>
+                    <div class="text-xs">
+                        <p id="user-name" class="font-semibold text-white">Alexander Vance</p>
+                        <p id="user-role-display" class="text-slate-400">Executive Director</p>
+                    </div>
+                </div>
+                <button onclick="toggleRoleSelector()" class="p-1.5 text-slate-400 hover:text-gold-400 transition-colors" title="Switch User Role">
+                    <i data-lucide="user-check" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm"></div>
+
+        <!-- ========================================================= -->
+        <!-- MAIN CONTENT AREA                                         -->
+        <!-- ========================================================= -->
+        <div class="flex-1 flex flex-col h-full lg:pl-72 overflow-hidden bg-slate-950">
+
+            <!-- Top Header Navbar -->
+            <header class="h-16 bg-dark-card/90 border-b border-dark-border flex items-center justify-between px-4 lg:px-8 z-30 backdrop-blur">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg bg-dark-hover">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <!-- Branch Selector -->
+                    <div class="relative flex items-center">
+                        <i data-lucide="building-2" class="w-4 h-4 text-gold-500 absolute left-3"></i>
+                        <select id="branchSelect" onchange="changeBranch(this.value)" class="bg-dark-base border border-dark-border text-xs rounded-lg text-slate-200 pl-9 pr-8 py-2 focus:border-gold-500 focus:outline-none appearance-none cursor-pointer hover:border-gold-500/50 transition-colors">
+                            <option value="b1">Grand Paragon Hotel & Resort (HQ)</option>
+                            <option value="b2">Aureus Bistro - Downtown</option>
+                            <option value="b3">Aureus Kitchen - Central Warehouse</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Right Quick Controls -->
+                <div class="flex items-center space-x-3">
+                    <!-- Role Switcher Dropdown Badge -->
+                    <div class="relative">
+                        <button onclick="toggleRoleMenu()" class="px-3 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-400 text-xs font-semibold flex items-center space-x-2 hover:bg-gold-500/20 transition-all">
+                            <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
+                            <span id="current-role-badge">Role: Super Admin</span>
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </button>
+                        <!-- Role Selector Menu -->
+                        <div id="role-menu" class="hidden absolute right-0 mt-2 w-56 bg-dark-card border border-dark-border rounded-xl shadow-2xl z-50 py-2 text-xs">
+                            <div class="px-3 py-1.5 text-slate-400 font-semibold uppercase text-[10px] tracking-wider">Simulate RBAC View</div>
+                            <button onclick="setRole('Super Admin')" class="w-full text-left px-4 py-2 hover:bg-dark-hover text-white flex items-center justify-between">Super Admin <i data-lucide="check" class="w-3.5 h-3.5 text-gold-500"></i></button>
+                            <button onclick="setRole('Chef')" class="w-full text-left px-4 py-2 hover:bg-dark-hover text-slate-300">Executive Chef (KDS)</button>
+                            <button onclick="setRole('Cashier')" class="w-full text-left px-4 py-2 hover:bg-dark-hover text-slate-300">Front Cashier (POS)</button>
+                            <button onclick="setRole('Housekeeping')" class="w-full text-left px-4 py-2 hover:bg-dark-hover text-slate-300">Housekeeping Lead</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Notifications -->
+                    <button class="relative p-2 text-slate-400 hover:text-gold-400 rounded-lg hover:bg-dark-hover transition-colors">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
+                    </button>
+
+                    <!-- Date Context -->
+                    <div class="hidden md:flex items-center text-xs text-slate-400 border-l border-dark-border pl-3">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-1.5 text-gold-500"></i>
+                        <span id="live-date">Aug 25, 2026</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Workspace Content (Rendered via JS Router) -->
+            <main id="app-workspace" class="flex-1 overflow-y-auto p-4 lg:p-6 bg-slate-950 text-slate-100">
+                <!-- VIEW CONTENT IS INJECTED HERE -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Global Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Global Modal Dialog Container -->
+    <div id="modal-container" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"></div>
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT LOGIC & APPLICATION ARCHITECTURE               -->
+    <!-- ========================================================= -->
+    <script>
+        // --- CENTRAL APPLICATION STATE ---
+        const AppState = {
+            currentRole: 'Super Admin',
+            currentBranch: 'b1',
+            activeView: 'dashboard',
+            menuItems: [
+                { id: 'm1', name: 'Wagyu Ribeye Steak', category: 'Mains', price: 48.00, cost: 16.80, code: 'MN-001', stock: 45, image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=300&auto=format&fit=crop&q=80' },
+                { id: 'm2', name: 'Truffle Pasta Fettuccine', category: 'Mains', price: 28.00, cost: 7.50, code: 'MN-002', stock: 60, image: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281318?w=300&auto=format&fit=crop&q=80' },
+                { id: 'm3', name: 'Pan-Seared Salmon', category: 'Mains', price: 34.00, cost: 11.20, code: 'MN-003', stock: 18, image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=300&auto=format&fit=crop&q=80' },
+                { id: 'm4', name: 'Artisan Caesar Salad', category: 'Starters', price: 16.00, cost: 3.80, code: 'ST-001', stock: 80, image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=300&auto=format&fit=crop&q=80' },
+                { id: 'm5', name: 'Gold Leaf Espresso Martini', category: 'Beverages', price: 22.00, cost: 4.10, code: 'BV-001', stock: 120, image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&auto=format&fit=crop&q=80' },
+                { id: 'm6', name: 'Chocolate Fondant Lava', category: 'Desserts', price: 14.00, cost: 3.20, code: 'DS-001', stock: 30, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300&auto=format&fit=crop&q=80' }
+            ],
+            posCart: [],
+            posSelectedTable: 'Table 04',
+            posCustomer: 'Walk-in Guest',
+            posDiscount: 0,
+            posTaxRate: 0.10, // 10%
+            posServiceCharge: 0.05, // 5%
+            
+            kdsOrders: [
+                { id: 'ORD-8091', table: 'T-04', time: '12 min ago', status: 'NEW', items: [{ name: 'Wagyu Ribeye Steak', qty: 2, note: 'Medium Rare' }, { name: 'Gold Leaf Espresso Martini', qty: 2, note: '' }] },
+                { id: 'ORD-8090', table: 'T-02', time: '22 min ago', status: 'PREPARING', items: [{ name: 'Truffle Pasta Fettuccine', qty: 1, note: 'Extra Parmesan' }, { name: 'Artisan Caesar Salad', qty: 1, note: 'No croutons' }] },
+                { id: 'ORD-8089', table: 'T-08', time: '31 min ago', status: 'READY', items: [{ name: 'Pan-Seared Salmon', qty: 3, note: 'Sauce on side' }] }
+            ],
+            
+            inventoryItems: [
+                { id: 'INV-101', name: 'A5 Wagyu Beef Ribeye', category: 'Meat & Poultry', unit: 'kg', stock: 14.5, minStock: 20, maxStock: 100, unitCost: 85.00, status: 'LOW STOCK' },
+                { id: 'INV-102', name: 'Black Truffle Oil', category: 'Pantry', unit: 'Bottles', stock: 8, minStock: 5, maxStock: 30, unitCost: 42.00, status: 'IN STOCK' },
+                { id: 'INV-103', name: 'Norwegian Atlantic Salmon', category: 'Seafood', unit: 'kg', stock: 3.2, minStock: 10, maxStock: 40, unitCost: 24.50, status: 'LOW STOCK' },
+                { id: 'INV-104', name: 'Organic Heavy Cream', category: 'Dairy', unit: 'Liters', stock: 0.5, minStock: 12, maxStock: 50, unitCost: 6.20, status: 'OUT OF STOCK' },
+                { id: 'INV-105', name: 'Single Origin Espresso Beans', category: 'Beverage', unit: 'kg', stock: 48, minStock: 15, maxStock: 100, unitCost: 18.00, status: 'IN STOCK' }
+            ],
+
+            hotelRooms: [
+                { number: '101', type: 'Deluxe Suite', status: 'OCCUPIED', guest: 'Sir Marcus Vance', price: 350 },
+                { number: '102', type: 'Deluxe Suite', status: 'AVAILABLE', guest: '-', price: 350 },
+                { number: '103', type: 'Executive Suite', status: 'CLEANING', guest: '-', price: 550 },
+                { number: '104', type: 'Royal Penthouse', status: 'OCCUPIED', guest: 'Lady Eleanor Pemberton', price: 1200 },
+                { number: '201', type: 'Premier King', status: 'DIRTY', guest: 'Checked Out', price: 280 },
+                { number: '202', type: 'Premier King', status: 'MAINTENANCE', guest: '-', price: 280 },
+                { number: '203', type: 'Premier Twin', status: 'AVAILABLE', guest: '-', price: 260 },
+                { number: '204', type: 'Executive Suite', status: 'OCCUPIED', guest: 'Ambassador Zhang', price: 550 }
+            ]
+        };
+
+        // Navigation Sidebar Menu Definition
+        const NavigationStructure = [
+            {
+                section: "OVERVIEW",
+                items: [
+                    { id: "dashboard", label: "Executive Dashboard", icon: "layout-dashboard" }
+                ]
+            },
+            {
+                section: "FRONT OF HOUSE",
+                items: [
+                    { id: "pos", label: "Smart POS System", icon: "calculator" },
+                    { id: "hotel", label: "Hotel & Rooms", icon: "bed-double" }
+                ]
+            },
+            {
+                section: "BACK OF HOUSE",
+                items: [
+                    { id: "kds", label: "Kitchen Display (KDS)", icon: "utensils-crossed" },
+                    { id: "recipes", label: "Recipes & Costing", icon: "book-open" },
+                    { id: "inventory", label: "Inventory & Stock", icon: "boxes" }
+                ]
+            },
+            {
+                section: "ANALYTICS & ADMIN",
+                items: [
+                    { id: "reports", label: "Business Intelligence", icon: "bar-chart-3" },
+                    { id: "settings", label: "System Settings", icon: "settings" }
+                ]
+            }
+        ];
+
+        // --- CORE APPLICATION INITIALIZATION ---
+        document.addEventListener("DOMContentLoaded", () => {
+            renderSidebar();
+            navigate('dashboard');
+            lucide.createIcons();
+            
+            // Set live date
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', options);
+        });
+
+        // --- NAVIGATION ROUTER ---
+        function renderSidebar() {
+            const menuContainer = document.getElementById('nav-menu');
+            menuContainer.innerHTML = '';
+
+            NavigationStructure.forEach(group => {
+                const groupHeader = document.createElement('div');
+                groupHeader.className = "px-3 mt-4 mb-2 text-[10px] font-bold uppercase tracking-wider text-gold-500/80";
+                groupHeader.innerText = group.section;
+                menuContainer.appendChild(groupHeader);
+
+                group.items.forEach(item => {
+                    const isActive = AppState.activeView === item.id;
+                    const btn = document.createElement('button');
+                    btn.onclick = () => navigate(item.id);
+                    btn.className = `w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 ${
+                        isActive 
+                        ? 'bg-gradient-to-r from-gold-500/20 to-gold-500/5 text-gold-400 border-l-4 border-gold-500 font-semibold shadow-sm' 
+                        : 'text-slate-400 hover:text-slate-100 hover:bg-dark-hover'
+                    }`;
+                    btn.innerHTML = `<i data-lucide="${item.icon}" class="w-4 h-4 ${isActive ? 'text-gold-500' : 'text-slate-400'}"></i><span>${item.label}</span>`;
+                    menuContainer.appendChild(btn);
+                });
+            });
+            lucide.createIcons();
+        }
+
+        function navigate(viewId) {
+            AppState.activeView = viewId;
+            renderSidebar();
+            
+            const workspace = document.getElementById('app-workspace');
+            workspace.scrollTop = 0;
+
+            switch(viewId) {
+                case 'dashboard': renderDashboardView(workspace); break;
+                case 'pos': renderPOSView(workspace); break;
+                case 'kds': renderKDSView(workspace); break;
+                case 'recipes': renderRecipeView(workspace); break;
+                case 'inventory': renderInventoryView(workspace); break;
+                case 'hotel': renderHotelView(workspace); break;
+                case 'reports': renderReportsView(workspace); break;
+                case 'settings': renderSettingsView(workspace); break;
+                default: renderDashboardView(workspace);
+            }
+            lucide.createIcons();
+        }
+
+        // --- UI INTERACTION CONTROLLERS ---
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            sb.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        function toggleRoleMenu() {
+            document.getElementById('role-menu').classList.toggle('hidden');
+        }
+
+        function setRole(roleName) {
+            AppState.currentRole = roleName;
+            document.getElementById('current-role-badge').innerText = `Role: ${roleName}`;
+            document.getElementById('user-role-display').innerText = roleName;
+            document.getElementById('role-menu').classList.add('hidden');
+            showToast(`Permissions updated for role: ${roleName}`, 'info');
+            navigate(AppState.activeView); // Re-render view with role context
+        }
+
+        function changeBranch(branchId) {
+            AppState.currentBranch = branchId;
+            showToast(`Switched active enterprise context`, 'success');
+            navigate(AppState.activeView);
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200' : 'bg-gold-950/90 border-gold-500/50 text-gold-200';
+            
+            toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl text-xs transition-all duration-300 transform translate-y-2 ${bgClass}`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4"></i><span class="font-medium">${message}</span>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ========================================================= -->
+        // VIEW RENDERERS                                            -->
+        // ========================================================= -->
+
+        // 1. EXECUTIVE DASHBOARD VIEW
+        function renderDashboardView(container) {
+            container.innerHTML = `
+                <!-- Top Executive Metric Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Total Sales</span>
+                            <i data-lucide="dollar-sign" class="w-4 h-4 text-gold-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-white">$42,850.00</div>
+                        <div class="text-[10px] text-emerald-400 mt-1 flex items-center"><i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> +14.2% vs last wk</div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Today's Sales</span>
+                            <i data-lucide="shopping-bag" class="w-4 h-4 text-gold-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-white">$6,420.50</div>
+                        <div class="text-[10px] text-emerald-400 mt-1 flex items-center"><i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> +8.1% target</div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Orders (Completed)</span>
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <div class="text-xl font-bold text-white">184 / 192</div>
+                        <div class="text-[10px] text-slate-400 mt-1">8 Pending in KDS</div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Food Cost %</span>
+                            <i data-lucide="pie-chart" class="w-4 h-4 text-gold-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-gold-400">28.4%</div>
+                        <div class="text-[10px] text-emerald-400 mt-1">-1.2% optimal range</div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Gross Profit</span>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <div class="text-xl font-bold text-white">$30,680.60</div>
+                        <div class="text-[10px] text-slate-400 mt-1">71.6% Margin</div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-4 rounded-2xl hover:border-gold-500/40 transition-all">
+                        <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
+                            <span>Low Stock Alerts</span>
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+                        </div>
+                        <div class="text-xl font-bold text-rose-400">3 Items</div>
+                        <div class="text-[10px] text-rose-300 mt-1">Action required</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="lg:col-span-2 bg-dark-card border border-dark-border p-5 rounded-2xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-semibold text-white text-sm">Revenue & Order Volume Analytics</h3>
+                                <p class="text-slate-400 text-xs">Real-time revenue performance comparison across branches</p>
+                            </div>
+                            <span class="text-xs text-gold-400 font-semibold bg-gold-500/10 px-2.5 py-1 rounded-lg border border-gold-500/20">Hourly Feed</span>
+                        </div>
+                        <div class="h-64 w-full">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-card border border-dark-border p-5 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-white text-sm">Cost & Profit Breakdown</h3>
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-slate-400"></i>
+                            </div>
+                            <div class="h-48 w-full relative flex items-center justify-center">
+                                <canvas id="costChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 text-center text-xs mt-4 pt-4 border-t border-dark-border">
+                            <div>
+                                <span class="block text-slate-400">COGS</span>
+                                <span class="font-bold text-slate-200">28.4%</span>
+                            </div>
+                            <div>
+                                <span class="block text-slate-400">Labor</span>
+                                <span class="font-bold text-slate-200">24.0%</span>
+                            </div>
+                            <div>
+                                <span class="block text-slate-400">Net Profit</span>
+                                <span class="font-bold text-gold-400">47.6%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Operational Cards Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Top Selling Menu Items -->
+                    <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                        <h3 class="font-semibold text-white text-sm mb-4 flex items-center justify-between">
+                            <span>Top Performing Menu Items</span>
+                            <span class="text-xs text-slate-400 font-normal">This Week</span>
+                        </h3>
+                        <div class="space-y-3">
+                            ${AppState.menuItems.slice(0, 4).map((item, idx) => `
+                                <div class="flex items-center justify-between p-2.5 rounded-xl bg-dark-base border border-dark-border/60">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xs font-bold text-gold-500 w-4">#${idx+1}</span>
+                                        <img src="${item.image}" class="w-10 h-10 rounded-lg object-cover" />
+                                        <div>
+                                            <p class="text-xs font-semibold text-white">${item.name}</p>
+                                            <p class="text-[10px] text-slate-400">${item.category} • Cost: $${item.cost.toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs font-bold text-white">$${item.price.toFixed(2)}</p>
+                                        <p class="text-[10px] text-emerald-400">74 Sold</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                        <h3 class="font-semibold text-white text-sm mb-4 flex items-center justify-between">
+                            <span class="flex items-center"><i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 mr-2"></i> Low Stock Warnings</span>
+                            <button onclick="navigate('inventory')" class="text-xs text-gold-400 hover:underline">Manage</button>
+                        </h3>
+                        <div class="space-y-3">
+                            ${AppState.inventoryItems.filter(i => i.status !== 'IN STOCK').map(item => `
+                                <div class="p-3 rounded-xl bg-dark-base border border-rose-500/20 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-xs font-semibold text-white">${item.name}</p>
+                                        <p class="text-[10px] text-slate-400">Current: <span class="text-rose-400 font-bold">${item.stock} ${item.unit}</span> (Min: ${item.minStock})</p>
+                                    </div>
+                                    <button onclick="showToast('Purchase Order generated for ${item.name}', 'info')" class="px-2.5 py-1 rounded-lg bg-gold-500/10 border border-gold-500/30 text-gold-400 text-[10px] font-semibold hover:bg-gold-500/20">Reorder</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Live Hotel & KDS Snapshot -->
+                    <div class="bg-dark-card border border-dark-border p-5 rounded-2xl">
+                        <h3 class="font-semibold text-white text-sm mb-4">Operations Snapshot</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-400">Hotel Occupancy</span>
+                                    <span class="text-white font-bold">75% (6 / 8 Rooms)</span>
+                                </div>
+                                <div class="w-full bg-dark-base rounded-full h-2 overflow-hidden border border-dark-border">
+                                    <div class="bg-gradient-to-r from-gold-500 to-amber-300 h-full rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-400">Kitchen KDS Load</span>
+                                    <span class="text-emerald-400 font-bold">Normal (3 Active Ticket)</span>
+                                </div>
+                                <div class="w-full bg-dark-base rounded-full h-2 overflow-hidden border border-dark-border">
+                                    <div class="bg-emerald-500 h-full rounded-full" style="width: 35%"></div>
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-t border-dark-border flex items-center justify-between text-xs">
+                                <div>
+                                    <span class="block text-slate-400">Today's Room Revenue</span>
+                                    <span class="text-sm font-bold text-white">$2,450.00</span>
+                                </div>
+                                <button onclick="navigate('hotel')" class="px-3 py-1.5 rounded-xl bg-dark-hover border border-dark-border text-slate-300 hover:text-white">View Rooms</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Initialize Dashboard Charts
+            setTimeout(() => {
+                const salesCtx = document.getElementById('salesChart')?.getContext('2d');
+                if (salesCtx) {
+                    new Chart(salesCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM', '10 PM'],
+                            datasets: [{
+                                label: 'Today Revenue ($)',
+                                data: [800, 1400, 4200, 3100, 2400, 6800, 8900, 5400],
+                                borderColor: '#d4af37',
+                                backgroundColor: 'rgba(212, 175, 55, 0.08)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } }
+                            }
+                        }
+                    });
+                }
+
+                const costCtx = document.getElementById('costChart')?.getContext('2d');
+                if (costCtx) {
+                    new Chart(costCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['COGS (Food Cost)', 'Labor & Operating', 'Net Margin'],
+                            datasets: [{
+                                data: [28.4, 24.0, 47.6],
+                                backgroundColor: ['#fada10', '#38bdf8', '#10b981'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            cutout: '75%'
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        // 2. POS SYSTEM VIEW
+        function renderPOSView(container) {
+            const subtotal = AppState.posCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const tax = subtotal * AppState.posTaxRate;
+            const service = subtotal * AppState.posServiceCharge;
+            const total = subtotal + tax + service - AppState.posDiscount;
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-6.5rem)]">
+                    
+                    <!-- LEFT COLUMN: Categories & Menu Grid (7 Columns) -->
+                    <div class="lg:col-span-7 flex flex-col h-full bg-dark-card border border-dark-border rounded-2xl p-4 overflow-hidden">
+                        
+                        <!-- Search & Filter Bar -->
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="relative flex-1">
+                                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+                                <input type="text" placeholder="Search dish, beverage or code..." class="w-full bg-dark-base border border-dark-border rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:border-gold-500 focus:outline-none" />
+                            </div>
+                            <div class="flex items-center space-x-2 border-l border-dark-border pl-3">
+                                <button class="px-3 py-2 rounded-xl bg-gold-500 text-dark-base font-bold text-xs">All Items</button>
+                                <button class="px-3 py-2 rounded-xl bg-dark-base border border-dark-border text-slate-300 text-xs hover:border-gold-500/40">Mains</button>
+                                <button class="px-3 py-2 rounded-xl bg-dark-base border border-dark-border text-slate-300 text-xs hover:border-gold-500/40">Beverages</button>
+                            </div>
+                        </div>
+
+                        <!-- Menu Cards Grid -->
+                        <div class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-3 pr-1">
+                            ${AppState.menuItems.map(item => `
+                                <div onclick="addToPosCart('${item.id}')" class="bg-dark-base border border-dark-border hover:border-gold-500/60 rounded-xl p-3 cursor-pointer transition-all duration-200 flex flex-col justify-between group">
+                                    <div>
+                                        <div class="relative mb-2 overflow-hidden rounded-lg h-24">
+                                            <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                            <span class="absolute top-1.5 right-1.5 bg-dark-base/80 text-gold-400 text-[10px] font-bold px-1.5 py-0.5 rounded border border-gold-500/30">${item.code}</span>
+                                        </div>
+                                        <h4 class="text-xs font-semibold text-white truncate">${item.name}</h4>
+                                        <p class="text-[10px] text-slate-400">${item.category}</p>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-3 pt-2 border-t border-dark-border/50">
+                                        <span class="text-xs font-bold text-gold-400">$${item.price.toFixed(2)}</span>
+                                        <span class="w-6 h-6 rounded-lg bg-gold-500/10 text-gold-400 group-hover:bg-gold-500 group-hover:text-dark-base flex items-center justify-center transition-colors">
+                                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Current Order Ticket / Checkout (5 Columns) -->
+                    <div class="lg:col-span-5 flex flex-col h-full bg-dark-card border border-dark-border rounded-2xl p-4">
+                        
+                        <!-- Order Ticket Header -->
+                        <div class="flex items-center justify-between border-b border-dark-border pb-3 mb-3">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-bold text-white text-sm">Order #ORD-8092</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">DINE-IN</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400">Server: Alex V. • Terminal 01</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="selectPOSTable()" class="px-2.5 py-1.5 rounded-lg bg-dark-base border border-dark-border text-gold-400 text-xs font-semibold flex items-center space-x-1">
+                                    <i data-lucide="utensils" class="w-3 h-3"></i>
+                                    <span>${AppState.posSelectedTable}</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Active Cart Items List -->
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-1 mb-3">
+                            ${AppState.posCart.length === 0 ? `
+                                <div class="h-full flex flex-col items-center justify-center text-slate-500 space-y-2">
+                                    <i data-lucide="shopping-cart" class="w-8 h-8 text-slate-600"></i>
+                                    <p class="text-xs">Cart is empty. Tap items to add to order.</p>
+                                </div>
+                            ` : AppState.posCart.map(item => `
+                                <div class="p-2.5 rounded-xl bg-dark-base border border-dark-border flex items-center justify-between text-xs">
+                                    <div class="flex-1 pr-2">
+                                        <p class="font-semibold text-white truncate">${item.name}</p>
+                                        <p class="text-[10px] text-slate-400">$${item.price.toFixed(2)} each</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button onclick="updateCartQty('${item.id}', -1)" class="w-6 h-6 rounded bg-dark-hover text-slate-300 flex items-center justify-center font-bold">-</button>
+                                        <span class="font-bold text-white text-xs w-4 text-center">${item.qty}</span>
+                                        <button onclick="updateCartQty('${item.id}', 1)" class="w-6 h-6 rounded bg-dark-hover text-slate-300 flex items-center justify-center font-bold">+</button>
+                                    </div>
+                                    <div class="w-16 text-right font-bold text-gold-400 ml-2">
+                                        $${(item.price * item.qty).toFixed(2)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Billing Breakdown -->
+                        <div class="border-t border-dark-border pt-3 space-y-1.5 text-xs text-slate-400">
+                            <div class="flex justify-between"><span>Subtotal</span><span class="text-white">$${subtotal.toFixed(2)}</span></div>
+                            <div class="flex justify-between"><span>Tax (10%)</span><span class="text-white">$${tax.toFixed(2)}</span></div>
+                            <div class="flex justify-between"><span>Service Charge (5%)</span><span class="text-white">$${service.toFixed(2)}</span></div>
+                            <div class="flex justify-between text-gold-400 font-bold text-sm pt-2 border-t border-dark-border">
+                                <span>Grand Total</span>
+                                <span>$${total.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons Grid -->
+                        <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-dark-border">
+                            <button onclick="sendOrderToKitchen()" class="py-2.5 rounded-xl bg-dark-hover border border-dark-border text-slate-200 text-xs font-semibold hover:border-gold-500/40 flex items-center justify-center space-x-1.5">
+                                <i data-lucide="send" class="w-3.5 h-3.5 text-gold-500"></i>
+                                <span>Send to KDS</span>
+                            </button>
+                            <button onclick="processPOSPayment()" class="py-2.5 rounded-xl bg-gradient-to-r from-gold-400 to-gold-600 text-dark-base text-xs font-bold shadow-lg flex items-center justify-center space-x-1.5 hover:brightness-110">
+                                <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                                <span>Pay & Settle</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // POS Cart Functions
+        function addToPosCart(itemId) {
+            const item = AppState.menuItems.find(m => m.id === itemId);
+            if (!item) return;
+
+            const existing = AppState.posCart.find(c => c.id === itemId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                AppState.posCart.push({ ...item, qty: 1 });
+            }
+            renderPOSView(document.getElementById('app-workspace'));
+            lucide.createIcons();
+        }
+
+        function updateCartQty(itemId, delta) {
+            const item = AppState.posCart.find(c => c.id === itemId);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    AppState.posCart = AppState.posCart.filter(c => c.id !== itemId);
+                }
+            }
+            renderPOSView(document.getElementById('app-workspace'));
+            lucide.createIcons();
+        }
+
+        function sendOrderToKitchen() {
+            if (AppState.posCart.length === 0) {
+                showToast('Cannot send empty order', 'info');
+                return;
+            }
+            AppState.kdsOrders.unshift({
+                id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+                table: AppState.posSelectedTable,
+                time: 'Just now',
+                status: 'NEW',
+                items: AppState.posCart.map(c => ({ name: c.name, qty: c.qty, note: '' }))
+            });
+            AppState.posCart = [];
+            showToast('Ticket routed directly to Kitchen KDS!', 'success');
+            renderPOSView(document.getElementById('app-workspace'));
+            lucide.createIcons();
+        }
+
+        function processPOSPayment() {
+            if (AppState.posCart.length === 0) {
+                showToast('Add items before settling bill', 'info');
+                return;
+            }
+            showToast('Payment successful. Receipt printed.', 'success');
+            AppState.posCart = [];
+            renderPOSView(document.getElementById('app-workspace'));
+            lucide.createIcons();
+        }
+
+        // 3. KITCHEN DISPLAY SYSTEM (KDS) VIEW
+        function renderKDSView(container) {
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <span>Kitchen Display System (KDS)</span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        </h2>
+                        <p class="text-xs text-slate-400">Live active prep tickets for Central Kitchen</p>
+                    </div>
+                    <div class="flex space-x-2 text-xs">
+                        <span class="px-3 py-1.5 rounded-xl bg-dark-card border border-dark-border text-slate-300">Total Active: <strong class="text-white">${AppState.kdsOrders.length}</strong></span>
+                    </div>
+                </div>
+
+                <!-- KDS Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${AppState.kdsOrders.map(order => {
+                        let statusBg = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                        if (order.status === 'PREPARING') statusBg = 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+                        if (order.status === 'READY') statusBg = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+
+                        return `
+                            <div class="bg-dark-card border border-dark-border rounded-2xl flex flex-col justify-between overflow-hidden shadow-xl">
+                                <div>
+                                    <!-- Ticket Top Header -->
+                                    <div class="p-4 border-b border-dark-border flex items-center justify-between bg-dark-base/40">
+                                        <div>
+                                            <span class="font-bold text-white text-base">${order.id}</span>
+                                            <span class="block text-xs text-slate-400">Table: <strong class="text-gold-400">${order.table}</strong> • ${order.time}</span>
+                                        </div>
+                                        <span class="px-2.5 py-1 rounded-lg text-xs font-bold border ${statusBg}">${order.status}</span>
+                                    </div>
+
+                                    <!-- Item Checklist -->
+                                    <div class="p-4 space-y-3">
+                                        ${order.items.map(item => `
+                                            <div class="flex items-start justify-between text-xs border-b border-dark-border/40 pb-2">
+                                                <div>
+                                                    <p class="font-bold text-slate-100 text-sm">${item.qty}x ${item.name}</p>
+                                                    ${item.note ? `<p class="text-[10px] text-amber-400 italic">Note: ${item.note}</p>` : ''}
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <!-- One-Click Status Update Actions -->
+                                <div class="p-3 border-t border-dark-border bg-dark-base/60 grid grid-cols-3 gap-2">
+                                    <button onclick="updateOrderStatus('${order.id}', 'NEW')" class="py-1.5 rounded-lg bg-dark-hover text-[10px] font-bold text-slate-300 hover:text-white">NEW</button>
+                                    <button onclick="updateOrderStatus('${order.id}', 'PREPARING')" class="py-1.5 rounded-lg bg-sky-500/20 border border-sky-500/30 text-[10px] font-bold text-sky-300 hover:bg-sky-500/30">PREP</button>
+                                    <button onclick="updateOrderStatus('${order.id}', 'READY')" class="py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-[10px] font-bold text-emerald-300 hover:bg-emerald-500/30">READY</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = AppState.kdsOrders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                showToast(`Ticket ${orderId} updated to ${newStatus}`, 'info');
+                renderKDSView(document.getElementById('app-workspace'));
+                lucide.createIcons();
+            }
+        }
+
+        // 4. RECIPE COSTING MODULE
+        function renderRecipeView(container) {
+            const sampleRecipe = {
+                code: 'RCP-104',
+                name: 'A5 Wagyu Ribeye Steak with Truffle Glaze',
+                yield: '1 Portion',
+                portionCost: 16.80,
+                sellingPrice: 48.00,
+                ingredients: [
+                    { name: 'A5 Wagyu Ribeye', qty: '0.25', unit: 'kg', unitCost: 60.00, totalCost: 15.00 },
+                    { name: 'Truffle Oil', qty: '0.01', unit: 'Liters', unitCost: 42.00, totalCost: 0.42 },
+                    { name: 'Organic Butter', qty: '0.03', unit: 'kg', unitCost: 12.00, totalCost: 0.36 },
+                    { name: 'Fresh Rosemary & Herbs', qty: '1', unit: 'Sprig', unitCost: 1.02, totalCost: 1.02 }
+                ]
+            };
+
+            const foodCostPct = ((sampleRecipe.portionCost / sampleRecipe.sellingPrice) * 100).toFixed(1);
+            const grossProfit = (sampleRecipe.sellingPrice - sampleRecipe.portionCost).toFixed(2);
+
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Recipe Management & Food Costing Calculator</h2>
+                        <p class="text-xs text-slate-400">Automatic margin calculation based on live inventory ingredient costs</p>
+                    </div>
+                    <button onclick="showToast('Recipe builder modal opened', 'info')" class="px-3.5 py-2 rounded-xl bg-gold-500 text-dark-base text-xs font-bold flex items-center space-x-1.5">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Create Recipe</span>
+                    </button>
+                </div>
+
+                <!-- Active Recipe Detail Card -->
+                <div class="bg-dark-card border border-dark-border rounded-2xl p-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-dark-border gap-4">
+                        <div>
+                            <span class="px-2.5 py-1 rounded bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-bold">${sampleRecipe.code}</span>
+                            <h3 class="text-xl font-bold text-white mt-2">${sampleRecipe.name}</h3>
+                            <p class="text-xs text-slate-400">Target Yield: ${sampleRecipe.yield}</p>
+                        </div>
+
+                        <!-- Computed Margin Metric Pills -->
+                        <div class="flex space-x-4">
+                            <div class="bg-dark-base border border-dark-border p-3 rounded-xl text-center min-w-[100px]">
+                                <span class="block text-[10px] text-slate-400">Portion Cost</span>
+                                <span class="text-sm font-bold text-white">$${sampleRecipe.portionCost.toFixed(2)}</span>
+                            </div>
+                            <div class="bg-dark-base border border-dark-border p-3 rounded-xl text-center min-w-[100px]">
+                                <span class="block text-[10px] text-slate-400">Selling Price</span>
+                                <span class="text-sm font-bold text-white">$${sampleRecipe.sellingPrice.toFixed(2)}</span>
+                            </div>
+                            <div class="bg-dark-base border border-gold-500/30 p-3 rounded-xl text-center min-w-[100px]">
+                                <span class="block text-[10px] text-slate-400">Food Cost %</span>
+                                <span class="text-sm font-bold text-gold-400">${foodCostPct}%</span>
+                            </div>
+                            <div class="bg-dark-base border border-emerald-500/30 p-3 rounded-xl text-center min-w-[100px]">
+                                <span class="block text-[10px] text-slate-400">Gross Profit</span>
+                                <span class="text-sm font-bold text-emerald-400">$${grossProfit}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingredients Table -->
+                    <div class="mt-6">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Ingredient Cost Breakdown</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="border-b border-dark-border text-slate-400">
+                                        <th class="pb-3 font-semibold">Ingredient Name</th>
+                                        <th class="pb-3 font-semibold">Qty</th>
+                                        <th class="pb-3 font-semibold">Unit</th>
+                                        <th class="pb-3 font-semibold">Unit Cost</th>
+                                        <th class="pb-3 font-semibold text-right">Total Ingredient Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-dark-border/50">
+                                    ${sampleRecipe.ingredients.map(ing => `
+                                        <tr>
+                                            <td class="py-3 font-semibold text-white">${ing.name}</td>
+                                            <td class="py-3 text-slate-300">${ing.qty}</td>
+                                            <td class="py-3 text-slate-400">${ing.unit}</td>
+                                            <td class="py-3 text-slate-300">$${ing.unitCost.toFixed(2)}</td>
+                                            <td class="py-3 text-right font-bold text-gold-400">$${ing.totalCost.toFixed(2)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 5. INVENTORY & STOCK CONTROL VIEW
+        function renderInventoryView(container) {
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Stock & Inventory Master</h2>
+                        <p class="text-xs text-slate-400">Real-time stock level tracking, low-stock alerts, and valuations</p>
+                    </div>
+                    <button onclick="showToast('Stock In modal triggered', 'info')" class="px-3.5 py-2 rounded-xl bg-gold-500 text-dark-base text-xs font-bold flex items-center space-x-1.5">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Stock Receive (In)</span>
+                    </button>
+                </div>
+
+                <!-- Inventory Data Table -->
+                <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden">
+                    <div class="p-4 border-b border-dark-border flex items-center justify-between">
+                        <input type="text" placeholder="Filter stock items..." class="bg-dark-base border border-dark-border rounded-xl px-3 py-1.5 text-xs text-white w-64 focus:outline-none focus:border-gold-500" />
+                        <span class="text-xs text-slate-400">Total Items Tracked: <strong>${AppState.inventoryItems.length}</strong></span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="bg-dark-base/50 text-slate-400 border-b border-dark-border">
+                                    <th class="p-3.5 font-semibold">SKU / Item</th>
+                                    <th class="p-3.5 font-semibold">Category</th>
+                                    <th class="p-3.5 font-semibold">Current Stock</th>
+                                    <th class="p-3.5 font-semibold">Min / Max</th>
+                                    <th class="p-3.5 font-semibold">Unit Cost</th>
+                                    <th class="p-3.5 font-semibold">Total Valuation</th>
+                                    <th class="p-3.5 font-semibold">Status</th>
+                                    <th class="p-3.5 font-semibold text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-dark-border/60">
+                                ${AppState.inventoryItems.map(item => {
+                                    let badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+                                    if (item.status === 'LOW STOCK') badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+                                    if (item.status === 'OUT OF STOCK') badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+
+                                    return `
+                                        <tr class="hover:bg-dark-hover/40 transition-colors">
+                                            <td class="p-3.5 font-semibold text-white">
+                                                <div>${item.name}</div>
+                                                <span class="text-[10px] text-slate-500">${item.id}</span>
+                                            </td>
+                                            <td class="p-3.5 text-slate-300">${item.category}</td>
+                                            <td class="p-3.5 font-bold text-white">${item.stock} ${item.unit}</td>
+                                            <td class="p-3.5 text-slate-400">${item.minStock} / ${item.maxStock}</td>
+                                            <td class="p-3.5 text-slate-300">$${item.unitCost.toFixed(2)}</td>
+                                            <td class="p-3.5 font-bold text-gold-400">$${(item.stock * item.unitCost).toFixed(2)}</td>
+                                            <td class="p-3.5">
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${item.status}</span>
+                                            </td>
+                                            <td class="p-3.5 text-right">
+                                                <button onclick="showToast('Adjusting stock for ${item.name}', 'info')" class="p-1.5 rounded hover:bg-dark-base text-slate-400 hover:text-white">
+                                                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 6. HOTEL & ROOM MANAGEMENT VIEW
+        function renderHotelView(container) {
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Hotel Room Status Dashboard</h2>
+                        <p class="text-xs text-slate-400">Live housekeeping and room inventory management</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="showToast('Guest Check-in modal opened', 'info')" class="px-3.5 py-2 rounded-xl bg-gold-500 text-dark-base text-xs font-bold flex items-center space-x-1">
+                            <i data-lucide="key-round" class="w-4 h-4"></i>
+                            <span>New Check-In</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Visual Room Status Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    ${AppState.hotelRooms.map(room => {
+                        let statusColor = 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400';
+                        if (room.status === 'OCCUPIED') statusColor = 'border-gold-500/40 bg-gold-500/5 text-gold-400';
+                        if (room.status === 'DIRTY') statusColor = 'border-rose-500/30 bg-rose-500/5 text-rose-400';
+                        if (room.status === 'CLEANING') statusColor = 'border-sky-500/30 bg-sky-500/5 text-sky-400';
+
+                        return `
+                            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 flex flex-col justify-between hover:border-gold-500/50 transition-all">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xl font-bold text-white">Room ${room.number}</span>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${statusColor}">${room.status}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-400">${room.type}</p>
+                                    <p class="text-xs font-semibold text-slate-200 mt-3 truncate">Guest: ${room.guest}</p>
+                                </div>
+                                <div class="mt-4 pt-3 border-t border-dark-border/60 flex items-center justify-between text-xs">
+                                    <span class="font-bold text-gold-400">$${room.price}/night</span>
+                                    <button onclick="showToast('Room ${room.number} selected', 'info')" class="text-slate-400 hover:text-white"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // 7. REPORTS & BUSINESS INTELLIGENCE VIEW
+        function renderReportsView(container) {
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Executive Business Intelligence Reports</h2>
+                        <p class="text-xs text-slate-400">Exportable operational summaries and financial statements</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="showToast('Exporting report as PDF...', 'success')" class="px-3 py-1.5 rounded-xl bg-dark-card border border-dark-border text-slate-300 text-xs hover:border-gold-500/40 flex items-center space-x-1">
+                            <i data-lucide="download" class="w-3.5 h-3.5 text-gold-500"></i>
+                            <span>PDF</span>
+                        </button>
+                        <button onclick="showToast('Exporting report to Excel...', 'success')" class="px-3 py-1.5 rounded-xl bg-dark-card border border-dark-border text-slate-300 text-xs hover:border-gold-500/40 flex items-center space-x-1">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span>Excel</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-dark-card border border-dark-border rounded-2xl p-6">
+                    <h3 class="font-bold text-white text-sm mb-4">Monthly Profit & Loss (P&L) Statement Summary</h3>
+                    <div class="space-y-3 text-xs">
+                        <div class="flex justify-between py-2 border-b border-dark-border">
+                            <span class="text-slate-300 font-medium">Gross Revenue (F&B + Hotel)</span>
+                            <span class="font-bold text-white">$142,500.00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-dark-border text-rose-300">
+                            <span>Cost of Goods Sold (COGS)</span>
+                            <span>-$40,470.00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-dark-border text-slate-300 font-bold">
+                            <span>Gross Operating Margin</span>
+                            <span class="text-gold-400">$102,030.00 (71.6%)</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-dark-border text-rose-300">
+                            <span>Labor & Payroll</span>
+                            <span>-$34,200.00</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-dark-border text-rose-300">
+                            <span>Utilities & Overhead</span>
+                            <span>-$12,100.00</span>
+                        </div>
+                        <div class="flex justify-between py-3 font-bold text-sm text-emerald-400 bg-emerald-500/10 px-3 rounded-xl border border-emerald-500/20">
+                            <span>Net Profit (EBITDA)</span>
+                            <span>$55,730.00 (39.1%)</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 8. SYSTEM SETTINGS VIEW
+        function renderSettingsView(container) {
+            container.innerHTML = `
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold text-white">System Settings & RBAC Permissions</h2>
+                    <p class="text-xs text-slate-400">Configure multi-tenant rules, tax settings, and security</p>
+                </div>
+
+                <div class="bg-dark-card border border-dark-border rounded-2xl p-6 space-y-6">
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-2">Active Role Permissions Matrix</h3>
+                        <p class="text-xs text-slate-400 mb-4">Configure access privileges for current role: <strong class="text-gold-400">${AppState.currentRole}</strong></p>
+                        
+                        <div class="space-y-2 text-xs">
+                            <label class="flex items-center space-x-3 p-3 rounded-xl bg-dark-base border border-dark-border">
+                                <input type="checkbox" checked class="rounded border-dark-border text-gold-500 focus:ring-0" />
+                                <span class="text-white font-medium">Full Access to Financial Reports & Margins</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 rounded-xl bg-dark-base border border-dark-border">
+                                <input type="checkbox" checked class="rounded border-dark-border text-gold-500 focus:ring-0" />
+                                <span class="text-white font-medium">POS Order Refund & Void Authorization</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 rounded-xl bg-dark-base border border-dark-border">
+                                <input type="checkbox" checked class="rounded border-dark-border text-gold-500 focus:ring-0" />
+                                <span class="text-white font-medium">Inventory Stock Adjustment Overrides</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="showToast('System configuration saved', 'success')" class="px-4 py-2 rounded-xl bg-gold-500 text-dark-base text-xs font-bold">Save Configuration</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
