@@ -1224,3 +1224,40 @@ useEffect(() => {
         </form>
     </div>
 </div>
+// Modal Element များကို ရယူခြင်း
+const openModalBtn = document.getElementById('openModalBtn');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const recipeModal = document.getElementById('recipeModal');
+const recipeForm = document.getElementById('recipeForm');
+
+// Recipe များကို သိမ်းဆည်းမည့် Local Array (State)
+let recipes = [];
+
+// Modal ဖွင့်/ပိတ် Logic
+openModalBtn.addEventListener('click', () => {
+    recipeModal.classList.remove('hidden');
+});
+
+closeModalBtn.addEventListener('click', () => {
+    recipeModal.classList.add('hidden');
+});
+
+// Form Submit သည့်အခါ Data ထည့်သွင်းခြင်း
+recipeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const newRecipe = {
+        id: Date.now(),
+        name: document.getElementById('recipeName').value,
+        category: document.getElementById('recipeCategory').value,
+        price: parseFloat(document.getElementById('recipePrice').value)
+    };
+
+    recipes.push(newRecipe);
+    console.log("Updated Recipes List:", recipes);
+
+    // Form ပိတ်ပြီး Clear လုပ်ခြင်း
+    recipeForm.reset();
+    recipeModal.classList.add('hidden');
+    alert(`"${newRecipe.name}" ခေါင်းစဉ်ဖြင့် Recipe အသစ် ထည့်သွင်းပြီးပါပြီ။`);
+});
