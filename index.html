@@ -1,24 +1,45 @@
-<script>
-  <!-- Supabase Library ထည့်သွင်းခြင်း -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Supabase Client ကို ကြေညာခြင်း (ဒီနေရာမှာ supabaseClient မပါလို့ Error တက်နေတာပါ)
+  // Supabase Initial Configuration
   const SUPABASE_URL = 'https://mszusnijiaefglqlqev.supabase.co';
-  const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'; // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zenVzbmlqaWFlZmdscXlscWV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NzYyNTIsImV4cCI6MjEwMzI1MjI1Mn0.U-InjuhZRa4LCHDzExmF--gLUx0fFwpdLyHuzy2O0Vg
-  
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zenVzbmlqaWFlZmdscWxxZXYiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODEyMzA5NCwiZXhwIjoyMDUzNjk5MDk0fQ.YOUR_ACTUAL_KEY_SUFFIX'; // သင့် Supabase Anon Key အပြည့်အစုံကို ဒီ ' ' ထဲမှာ အစားထိုးပါ
+
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-</script>
-// Session စစ်ဆေးခြင်း
-async function checkUserSession() {
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  const loginModal = document.getElementById('login-modal');
-  if (!session) {
-    loginModal.classList.remove('hidden');
-  } else {
-    loginModal.classList.add('hidden');
+
+  // Session စစ်ဆေးခြင်း
+  async function checkUserSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const loginModal = document.getElementById('login-modal');
+    if (!session) {
+      if (loginModal) loginModal.classList.remove('hidden');
+    } else {
+      if (loginModal) loginModal.classList.add('hidden');
+    }
   }
-}
+
+  // Login ဝင်ခြင်း
+  async function handleLogin() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      alert('Login Failed: ' + error.message);
+    } else {
+      location.reload();
+    }
+  }
+
+  // Logout ထွက်ခြင်း
+  async function handleLogout() {
+    await supabaseClient.auth.signOut();
+    location.reload();
+  }
+
+  document.addEventListener('DOMContentLoaded', checkUserSession);
+</script>
 // Login ဝင်ခြင်း
 async function handleLogin() {
   const email = document.getElementById('login-email').value;
