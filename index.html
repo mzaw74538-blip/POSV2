@@ -1382,9 +1382,7 @@ recipeForm.addEventListener('submit', (e) => {
         // စာမျက်နှာစဖွင့်ချိန်တွင် Data များ ပေါ်လာစေရန် ရေးဆွဲခြင်း
         renderRecipes();
     </script>
-</body>
-</html>
-// Supabase Connection ပြုလုပ်ခြင်း
+    // Supabase Connection ပြုလုပ်ခြင်း
 const SUPABASE_URL = 'https://mszusnijiaefglqlqev.supabase.co';
 const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // သင်၏ Anon Public Key ထည့်ပါ
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1416,3 +1414,6 @@ async function loadProductsFromSupabase() {
 
 // စာမျက်နှာ Paging ပွင့်ချိန်တွင် Run ရန်
 document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
+</body>
+</html>
+
