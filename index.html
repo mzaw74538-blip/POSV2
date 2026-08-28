@@ -1,4 +1,14 @@
 <script>
+  <!-- Supabase Library ထည့်သွင်းခြင်း -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Supabase Client ကို ကြေညာခြင်း (ဒီနေရာမှာ supabaseClient မပါလို့ Error တက်နေတာပါ)
+  const SUPABASE_URL = 'https://mszusnijiaefglqlqev.supabase.co';
+  const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'; // သင့် Supabase Anon Key ထည့်ပါ
+  
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 // Session စစ်ဆေးခြင်း
 async function checkUserSession() {
   const { data: { session } } = await supabaseClient.auth.getSession();
