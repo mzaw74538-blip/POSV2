@@ -1384,3 +1384,35 @@ recipeForm.addEventListener('submit', (e) => {
     </script>
 </body>
 </html>
+// Supabase Connection ပြုလုပ်ခြင်း
+const SUPABASE_URL = 'https://mszusnijiaefglqlqev.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // သင်၏ Anon Public Key ထည့်ပါ
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Products & Images များကို Fetch လုပ်ပြီး Display ဖော်ပြပေးသည့် Function
+async function loadProductsFromSupabase() {
+  const { data: products, error } = await supabaseClient
+    .from('products')
+    .select('*');
+
+  if (error) {
+    console.error('Error fetching products:', error);
+    return;
+  }
+
+  console.log('Fetched Products:', products);
+
+  // စာမျက်နှာပေါ်ရှိ Product List / Cards များကို Dynamic Render လုပ်ပေးမည့် Logic
+  // Example:
+  // const container = document.getElementById('pos-product-list');
+  // container.innerHTML = products.map(item => `
+  //   <div class="card">
+  //     <img src="${item.image_url}" alt="${item.name}" class="w-full h-32 object-cover" />
+  //     <h4>${item.name}</h4>
+  //     <p>$${item.price}</p>
+  //   </div>
+  // `).join('');
+}
+
+// စာမျက်နှာ Paging ပွင့်ချိန်တွင် Run ရန်
+document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
