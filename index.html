@@ -1174,3 +1174,11 @@
     </script>
 </body>
 </html>
+// State ပြောင်းလဲပုံ ဥပမာ (React / Vanilla JS)
+function updateOrderStatus(orderId, newStatus) {
+  setOrders(prevOrders => 
+    prevOrders.map(order => 
+      order.id === orderId ? { ...order, status: newStatus } : order
+    )
+  );
+}
