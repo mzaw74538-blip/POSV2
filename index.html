@@ -1494,4 +1494,36 @@ document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
 </div>
 </body>
 </html>
+<script>
+// Modal ဖွင့်/ပိတ်ပေးမည့် Functions
+function showResetPasswordModal() {
+  document.getElementById('login-modal').classList.add('hidden');
+  document.getElementById('reset-modal').classList.remove('hidden');
+}
 
+function closeResetModal() {
+  document.getElementById('reset-modal').classList.add('hidden');
+  document.getElementById('login-modal').classList.remove('hidden');
+}
+
+// Supabase မှ Reset Password Email ပို့ပေးမည့် Function
+async function handleResetPassword() {
+  const email = document.getElementById('reset-email').value;
+
+  if (!email) {
+    alert('ကျေးဇူးပြု၍ Email ရိုက်ထည့်ပါ');
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin, // Reset လုပ်ပြီးပါက POS Website သို့ ပြန်ညွှန်းမည်
+  });
+
+  if (error) {
+    alert('Error: ' + error.message);
+  } else {
+    alert('Password reset link ကို သင့် Email သို့ ပို့ပေးလိုက်ပါပြီ။ Email သွားစစ်ဆေးပေးပါ။');
+    closeResetModal();
+  }
+}
+</script>
