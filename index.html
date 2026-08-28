@@ -1478,6 +1478,20 @@ document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
   </button>
 </div>
+  <!-- Forgot Password Modal -->
+<div id="reset-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center hidden">
+  <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl w-96 text-white shadow-2xl relative">
+    <h3 class="text-xl font-bold text-amber-400 mb-2">Reset Password</h3>
+    <p class="text-xs text-gray-400 mb-4">သင့် Email ထို့ သို့ Reset Link ပို့ပေးပါမည်။</p>
+    
+    <input type="email" id="reset-email" placeholder="Enter your email" class="w-full p-3 mb-4 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+    
+    <div class="flex gap-2">
+      <button onclick="closeResetModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-gray-300 font-bold p-2.5 rounded-xl transition text-sm">Cancel</button>
+      <button onclick="handleResetPassword()" class="w-1/2 bg-amber-500 hover:bg-amber-400 text-black font-bold p-2.5 rounded-xl transition text-sm">Send Link</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
