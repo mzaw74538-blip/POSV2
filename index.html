@@ -1464,6 +1464,20 @@ document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
     </div>
   </div>
 </div>
+  <!-- Left Sidebar Bottom Profile Section -->
+<div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
+  <div class="flex items-center gap-3">
+    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-9 h-9 rounded-full object-cover border border-amber-500/30">
+    <div>
+      <h4 class="text-xs font-bold text-white">Alexander Vance</h4>
+      <p class="text-[10px] text-gray-400">Executive Director</p>
+    </div>
+  </div>
+  <!-- Logout Button Display -->
+  <button onclick="handleLogout()" title="Logout" class="text-gray-400 hover:text-red-400 p-2 rounded-lg hover:bg-red-500/10 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  </button>
+</div>
 </body>
 </html>
 
