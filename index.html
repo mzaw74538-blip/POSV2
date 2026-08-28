@@ -1,3 +1,35 @@
+// Session စစ်ဆေးခြင်း
+async function checkUserSession() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  const loginModal = document.getElementById('login-modal');
+  if (!session) {
+    loginModal.classList.remove('hidden');
+  } else {
+    loginModal.classList.add('hidden');
+  }
+}
+
+// Login ဝင်ခြင်း
+async function handleLogin() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    alert('Login Failed: ' + error.message);
+  } else {
+    location.reload();
+  }
+}
+
+// Logout ထွက်ခြင်း
+async function handleLogout() {
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', checkUserSession);
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-900">
 <head>
