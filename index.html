@@ -18,27 +18,38 @@
     }
   }
 
-  // Login ဝင်ခြင်း
-async function handleLogin() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+ // Local PIN Auth Logic
+const ADMIN_PIN = "1234";
 
-  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    alert('Login Failed: ' + error.message);
+function checkSimpleAuth() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const loginModal = document.getElementById("login-modal");
+  
+  if (isLoggedIn === "true") {
+    if (loginModal) loginModal.classList.add("hidden");
   } else {
-    location.reload();
+    if (loginModal) loginModal.classList.remove("hidden");
   }
 }
 
-  // Logout ထွက်ခြင်း
-  async function handleLogout() {
-    await supabaseClient.auth.signOut();
-    location.reload();
+function handleSimpleLogin() {
+  const inputPin = document.getElementById("login-pin").value;
+  
+  if (inputPin === ADMIN_PIN) {
+    localStorage.setItem("isLoggedIn", "true");
+    document.getElementById("login-modal").classList.add("hidden");
+    document.getElementById("login-pin").value = "";
+  } else {
+    alert("PIN မှားယွင်းနေပါသည်။ (Default PIN: 1234)");
   }
+}
 
-  document.addEventListener('DOMContentLoaded', checkUserSession);
+function handleSimpleLogout() {
+  localStorage.removeItem("isLoggedIn");
+  location.reload();
+}
+
+document.addEventListener("DOMContentLoaded", checkSimpleAuth);
 </script>
 // Login ဝင်ခြင်း
 async function handleLogin() {
@@ -1466,27 +1477,20 @@ async function loadProductsFromSupabase() {
   // const container = document.getElementById('pos-product-list');
   // container.innerHTML = products.map(item => `
   //   <div class="card">
-  //     <img src="${item.image_url}" alt="${item.name}" class="w-full h-32 object-cover" />
-  //     <h4>${item.name}</h4>
-  //     <p>$${item.price}</p>
-  //   </div>
-  // `).join('');
-}
-
-// စာမျက်နှာ Paging ပွင့်ချိန်တွင် Run ရန်
-document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
-  <!-- Login Pop-up UI Display -->
+  <!-- PIN Login Modal -->
 <div id="login-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center">
-  <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-96 text-white shadow-2xl relative">
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-amber-400">AUREUS POS</h2>
-      <p class="text-xs text-gray-400 mt-1">Please sign in to access system</p>
-    </div>
+  <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-96 text-white shadow-2xl relative text-center">
+    <h2 class="text-2xl font-bold text-amber-400 mb-1">AUREUS POS</h2>
+    <p class="text-xs text-gray-400 mb-6">Enter Admin PIN to Sign In</p>
+    
     <div class="space-y-4">
       <div>
-        <label class="block text-xs text-gray-400 mb-1">Email Address</label>
-        <input type="email" id="login-email" placeholder="admin@aureus.com" class="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+        <input type="password" id="login-pin" placeholder="••••" maxlength="6" class="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-center text-xl font-bold tracking-widest text-white focus:outline-none focus:border-amber-500">
       </div>
+      <button type="button" onclick="handleSimpleLogin()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-xl transition">Sign In</button>
+    </div>
+  </div>
+</div>
       <div>
         <label class="block text-xs text-gray-400 mb-1">Password</label>
         <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500">
@@ -1554,6 +1558,38 @@ async function handleResetPassword() {
     alert('Error: ' + error.message);
   } else {
     alert('Password reset link ကို သင့် Email သို့ ပို့ပေးလိုက်ပါပြီ။ Email သွားစစ်ဆေးပေးပါ။');
+    // Local PIN Auth Logic
+const ADMIN_PIN = "1234";
+
+function checkSimpleAuth() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const loginModal = document.getElementById("login-modal");
+  
+  if (isLoggedIn === "true") {
+    if (loginModal) loginModal.classList.add("hidden");
+  } else {
+    if (loginModal) loginModal.classList.remove("hidden");
+  }
+}
+
+function handleSimpleLogin() {
+  const inputPin = document.getElementById("login-pin").value;
+  
+  if (inputPin === ADMIN_PIN) {
+    localStorage.setItem("isLoggedIn", "true");
+    document.getElementById("login-modal").classList.add("hidden");
+    document.getElementById("login-pin").value = "";
+  } else {
+    alert("PIN မှားယွင်းနေပါသည်။ (Default PIN: 1234)");
+  }
+}
+
+function handleSimpleLogout() {
+  localStorage.removeItem("isLoggedIn");
+  location.reload();
+}
+
+document.addEventListener("DOMContentLoaded", checkSimpleAuth);
     closeResetModal();
   }
 }
