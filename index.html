@@ -690,8 +690,32 @@
                             </div>
                             <div class="flex items-center space-x-2 border-l border-dark-border pl-3">
                                 <button class="px-3 py-2 rounded-xl bg-gold-500 text-dark-base font-bold text-xs">All Items</button>
+                                <button 
+  onClick={() => setSelectedCategory('all')}
+  className={`bg-dark-base border border-dark-border text-xs px-4 py-1.5 rounded-xl transition-all ${
+    selectedCategory === 'all' ? 'bg-gold-500 text-dark-base font-bold' : 'text-slate-300 hover:border-gold-500/40'
+  }`}
+>
+  All Items
+</button>
                                 <button class="px-3 py-2 rounded-xl bg-dark-base border border-dark-border text-slate-300 text-xs hover:border-gold-500/40">Mains</button>
+                                <button 
+  onClick={() => setSelectedCategory('Mains')}
+  className={`bg-dark-base border border-dark-border text-xs px-4 py-1.5 rounded-xl transition-all ${
+    selectedCategory === 'Mains' ? 'bg-gold-500 text-dark-base font-bold' : 'text-slate-300 hover:border-gold-500/40'
+  }`}
+>
+  Mains
+</button>
                                 <button class="px-3 py-2 rounded-xl bg-dark-base border border-dark-border text-slate-300 text-xs hover:border-gold-500/40">Beverages</button>
+<button 
+  onClick={() => setSelectedCategory('Beverages')}
+  className={`bg-dark-base border border-dark-border text-xs px-4 py-1.5 rounded-xl transition-all ${
+    selectedCategory === 'Beverages' ? 'bg-gold-500 text-dark-base font-bold' : 'text-slate-300 hover:border-gold-500/40'
+  }`}
+>
+  Beverages
+</button>                                
                             </div>
                         </div>
 
