@@ -19,18 +19,18 @@
   }
 
   // Login ဝင်ခြင်း
-  async function handleLogin() {
-    const email = document.getElementById('login-email').value; <input type="email" id="login-email" ...>
-    const password = document.getElementById('login-password').value; <input type="password" id="login-password" ...>
+async function handleLogin() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      alert('Login Failed: ' + error.message);
-    } else {
-      location.reload();
-    }
+  if (error) {
+    alert('Login Failed: ' + error.message);
+  } else {
+    location.reload();
   }
+}
 
   // Logout ထွက်ခြင်း
   async function handleLogout() {
@@ -1491,7 +1491,7 @@ document.addEventListener('DOMContentLoaded', loadProductsFromSupabase);
         <label class="block text-xs text-gray-400 mb-1">Password</label>
         <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500">
       </div>
-      <button onclick="handleLogin()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-xl transition mt-2">Sign In</button>
+<button type="button" onclick="handleLogin()" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 rounded-xl transition mt-2">Sign In</button>
     </div>
   </div>
 </div>
