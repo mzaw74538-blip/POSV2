@@ -1,23 +1,39 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Supabase Initial Configuration
-  const SUPABASE_URL = 'https://mszusnijiaefglqlqev.supabase.co'
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zenVzbmlqaWFlZmdscWxxZXYiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczODEyMzA5NCwiZXhwIjoyMDUzNjk5MDk0fQ.YOUR_ACTUAL_KEY_SUFFIX'; // သင့် Supabase Anon Key အပြည့်အစုံကို ဒီ ' ' ထဲမှာ အစားထိုးပါ
+  // Local PIN Auth Logic
+  const ADMIN_PIN = "1234";
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  // Session စစ်ဆေးခြင်း
-  async function checkUserSession() {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    const loginModal = document.getElementById('login-modal');
-    if (!session) {
-      if (loginModal) loginModal.classList.remove('hidden');
+  function checkSimpleAuth() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const loginModal = document.getElementById("login-modal");
+    
+    if (isLoggedIn === "true") {
+      if (loginModal) loginModal.classList.add("hidden");
     } else {
-      if (loginModal) loginModal.classList.add('hidden');
+      if (loginModal) loginModal.classList.remove("hidden");
     }
   }
 
+  function handleSimpleLogin() {
+    const inputPin = document.getElementById("login-pin").value;
+    
+    if (inputPin === ADMIN_PIN) {
+      localStorage.setItem("isLoggedIn", "true");
+      document.getElementById("login-modal").classList.add("hidden");
+      document.getElementById("login-pin").value = "";
+    } else {
+      alert("PIN မှားယွင်းနေပါသည်။ (Default PIN: 1234)");
+    }
+  }
+
+  function handleSimpleLogout() {
+    localStorage.removeItem("isLoggedIn");
+    location.reload();
+  }
+
+  document.addEventListener("DOMContentLoaded", checkSimpleAuth);
+</script>
  // Local PIN Auth Logic
 const ADMIN_PIN = "1234";
 
