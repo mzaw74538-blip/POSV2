@@ -1397,57 +1397,14 @@ recipeForm.addEventListener('submit', (e) => {
     </div>
 
     <!-- JavaScript logic -->
-    <script>
-        const openModalBtn = document.getElementById('openModalBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const recipeModal = document.getElementById('recipeModal');
-        const recipeForm = document.getElementById('recipeForm');
-        const recipeTableBody = document.getElementById('recipeTableBody');
-
-        // Browser localStorage မှ Saved Data များ ဆွဲယူခြင်း
-        let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-
-        // UI တွင် Recipe များကို ဖော်ပြပေးသည့် Function
-        function renderRecipes() {
-            recipeTableBody.innerHTML = '';
-            if (recipes.length === 0) {
-                recipeTableBody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500">No recipes added yet.</td></tr>`;
-                return;
-            }
-            recipes.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-gray-800/50';
-                tr.innerHTML = `
-                    <td class="p-2 font-semibold">${item.name}</td>
-                    <td class="p-2 text-gray-400">${item.category}</td>
-                    <td class="p-2 text-amber-400">$${item.price.toFixed(2)}</td>
-                `;
-                recipeTableBody.appendChild(tr);
-            });
-        }
-
-        // Modal ဖွင့်/ပိတ် Logic
-        openModalBtn.addEventListener('click', () => recipeModal.classList.remove('hidden'));
-        closeModalBtn.addEventListener('click', () => recipeModal.classList.add('hidden'));
-
-        // Form Submit လုပ်သည့်အခါ Data သိမ်းဆည်းခြင်း
-        recipeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const newRecipe = {
-                id: Date.now(),
-                name: document.getElementById('recipeName').value,
-                category: document.getElementById('recipeCategory').value,
-                price: parseFloat(document.getElementById('recipePrice').value)
-            };
-
-            // Array ထဲသို့ ထည့်ခြင်းနှင့် localStorage တွင် သိမ်းခြင်း
-            recipes.push(newRecipe);
-            localStorage.setItem('recipes', JSON.stringify(recipes));
-
-            // UI ပြန်လည် Update လုပ်ခြင်း
-            renderRecipes();
-            recipeForm.reset();
+  <!-- Logout Button -->
+<button type="button" onclick="handleSimpleLogout()" title="Logout" class="text-gray-400 hover:text-red-400 p-2 rounded-lg transition cursor-pointer">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" y1="12" x2="9" y2="12"></line>
+  </svg>
+</button>
             recipeModal.classList.add('hidden');
         });
 
