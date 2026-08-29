@@ -27,63 +27,7 @@
     }
   }
 
-  function handleSimpleLogout() {
-    localStorage.removeItem("isLoggedIn");
-    location.reload();
-  }
 
-  document.addEventListener("DOMContentLoaded", checkSimpleAuth);
-</script>
- // Local PIN Auth Logic
-const ADMIN_PIN = "1234";
-
-function checkSimpleAuth() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  const loginModal = document.getElementById("login-modal");
-  
-  if (isLoggedIn === "true") {
-    if (loginModal) loginModal.classList.add("hidden");
-  } else {
-    if (loginModal) loginModal.classList.remove("hidden");
-  }
-}
-
-function handleSimpleLogin() {
-  const inputPin = document.getElementById("login-pin").value;
-  
-  if (inputPin === ADMIN_PIN) {
-    localStorage.setItem("isLoggedIn", "true");
-    document.getElementById("login-modal").classList.add("hidden");
-    document.getElementById("login-pin").value = "";
-  } else {
-    alert("PIN မှားယွင်းနေပါသည်။ (Default PIN: 1234)");
-  }
-}
-
-function handleSimpleLogout() {
-  localStorage.removeItem("isLoggedIn");
-  location.reload();
-}
-
-document.addEventListener("DOMContentLoaded", checkSimpleAuth);
-</script>
-// Login ဝင်ခြင်း
-async function handleLogin() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if (error) {
-    alert('Login Failed: ' + error.message);
-  } else {
-    location.reload();
-  }
-}
-// Logout ထွက်ခြင်း
-async function handleLogout() {
-  await supabaseClient.auth.signOut();
-  location.reload();
-}
-document.addEventListener('DOMContentLoaded', checkUserSession);
   </script>
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-900">
