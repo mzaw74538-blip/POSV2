@@ -20,8 +20,8 @@
 
   // Login ဝင်ခြင်း
   async function handleLogin() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
+    const email = document.getElementById('login-email').value; <input type="email" id="login-email" ...>
+    const password = document.getElementById('login-password').value; <input type="password" id="login-password" ...>
 
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
